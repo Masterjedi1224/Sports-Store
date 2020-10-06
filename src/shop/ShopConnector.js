@@ -4,19 +4,27 @@ import { connect } from "react-redux";
 import { loadData } from "../data/ActionCreators";
 import { DataTypes } from "../data/Types";
 import { Shop } from "./Shop";
+import { addToCart, updateCartQuantity, removeFromCart, clearCart } from "../data/CartActionCreators";
+import { CartDetails } from "./CartDetails";
 
 const mapStateToProps = (dataStore) => ({
     ...dataStore
 });
 
 const mapDispatchToProps = {
-    loadData
+    loadData, addToCart, updateCartQuantity, removeFromCart, clearCart
 }
 
 const filterProducts = ( products = [], category) => (!category || category === "All") ? products : products.filter( p => p.category.toLowerCase() === category.toLowerCase())
 
 
 class RouteSwitcher extends Component {
+/*    constructor(props) {
+        super(props);
+
+        console.log('The props coming into the connector are: ');
+        console.dir(this.props);
+    }*/
     render() {
         return <Switch>
             <Route 
@@ -26,6 +34,14 @@ class RouteSwitcher extends Component {
                         { ...this.props } 
                         { ...routeProps }
                         products={ filterProducts(this.props.products, routeProps.match.params.category) }
+                    />
+                }
+            />
+            <Route
+                path="/shop/cart"
+                render={ (routeProps) => 
+                    <CartDetails
+                        { ...this.props } { ...routeProps }
                     />
                 }
             />
